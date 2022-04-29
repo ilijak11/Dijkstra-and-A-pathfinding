@@ -1,5 +1,6 @@
 package pkg;
 
+import java.awt.Label;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,9 +13,11 @@ public class Pathfinder implements Runnable {
 	List<Node> closed = new ArrayList<>();
 	Node start;
 	Node end;
+	Label msg;
 	
-	public Pathfinder(Field f) {
+	public Pathfinder(Field f, Label l) {
 		this.field = f;
+		this.msg = l;
 	}
 	
 	private void Astar() {
@@ -56,6 +59,8 @@ public class Pathfinder implements Runnable {
 		}
 		if(curr != end) {
 			System.out.println("No path!");
+			msg.setText("No path!");
+			msg.revalidate();
 			return;
 		}
 		Node retrace = end;
@@ -68,6 +73,8 @@ public class Pathfinder implements Runnable {
 		start.repaint();
 		end.status = Status.End;
 		end.repaint();
+		msg.setText("Path foun!");
+		msg.revalidate();
 	}
 	
 	private void Dijkstra() {
@@ -117,6 +124,8 @@ public class Pathfinder implements Runnable {
 		}
 		if(curr != end) {
 			System.out.println("No path!");
+			msg.setText("No path!");
+			msg.revalidate();
 			return;
 		}
 		Node retrace = end;
@@ -129,6 +138,8 @@ public class Pathfinder implements Runnable {
 		start.repaint();
 		end.status = Status.End;
 		end.repaint();
+		msg.setText("Path foun!");
+		msg.revalidate();
 	}
 
 	@Override

@@ -43,7 +43,7 @@ public class MyWindow extends Frame {
 	
 	public MyWindow(int x, int y) {
 		field = new Field(x,y);
-		pathfinder = new Pathfinder(field);
+		pathfinder = new Pathfinder(field, label);
 		setBounds(200,25, 1000, 1000);
 		setTitle("A* pathfinding");
 		populateWindow();
@@ -122,7 +122,7 @@ public class MyWindow extends Frame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				pathfinder = new Pathfinder(field);
+				pathfinder = new Pathfinder(field, label);
 				if(thread != null) {
 					thread.interrupt();
 					try {
@@ -134,6 +134,8 @@ public class MyWindow extends Frame {
 				}
 				thread = new Thread(pathfinder);
 				field.clear();
+				label.setText("Set Start and Finish");
+				label.revalidate();
 			}
 		});
 		start.addActionListener(new ActionListener() {
@@ -146,7 +148,9 @@ public class MyWindow extends Frame {
 					if(field.end == null) msg += "End point not set";
 					msg += "!";
 					label.setText(msg);
-				}else {
+				} else if(Shared.editable) {
+					return;
+				} else {
 					Shared.started = true;
 					if(thread != null) {
 						thread.interrupt();
@@ -160,6 +164,7 @@ public class MyWindow extends Frame {
 					thread = new Thread(pathfinder);
 					thread.start();
 					label.setText("Started!");
+					label.revalidate();
 				}
 			}
 		});
@@ -178,9 +183,11 @@ public class MyWindow extends Frame {
 						}
 					}
 					pathfinder.clear();
-					pathfinder = new Pathfinder(field);
+					pathfinder = new Pathfinder(field, label);
 					thread = new Thread(pathfinder);
 					thread.start();
+					label.setText("Started!");
+					label.revalidate();
 				}
 				
 			}
@@ -199,7 +206,7 @@ public class MyWindow extends Frame {
 		controls.add(speedCtr);
 		controls.add(algCtr);
 		label.setAlignment(Label.CENTER);
-		label.setFont(new Font("Arial", Font.BOLD, 20));
+		label.setFont(new Font("Arial", Font.BOLD, 36));
 		speedLab.setFont(new Font("Arial", Font.BOLD, 15));
 		algLab.setFont(new Font("Arial", Font.BOLD, 15));
 		dash.add(label);
